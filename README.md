@@ -37,6 +37,7 @@ use profile\credits
 use github\profile\ProfileBase;
 use github\profile\Restore;
 use github\utils\Color;
+use github\profile\Account;
 
 class ItsToxicGG extends ProfileBase{
    
@@ -58,26 +59,38 @@ class ItsToxicGG extends ProfileBase{
        echo "chat with me: $discord";
    }
    
-   public function registerProfie(){
-       $name = "Toxic";
-       $password = "123465";
-       $gmail = "toxic@thisisfake.com";
+   public function registerProfie(string $name, string $password, string $email);
+       session_start();
+       $register = new Account($this);
+       $register->setPassword($password);
+       $register->addPassword($register->inputPasswordFromForm());
+       $register->getAndSetName($register->inputNameFromForm($name));
+       $register->removeEmailByName("@waitingfornewprofile.com");
+       $register->addNewEmailByInputForm(Restore::getEmail()->getInput($gmail));
     }
     
     public function onProfileDelete(){
-        $this->registerProfile($name, $password, $gmail);
-        $name = " ";
-        $password = " ";
-        $email = "@waitingfornewprofile.com"
+        session_end();
+        session_unset();
+        $profile = $this->registerProfile($name, $password, $gmail);
+        $register = new Account();
+        $register->unsetAccount();
+        $register->getHack()->hackMysqlData()->getDataOfDeletedProfile()->getDataNamePasswordEmail();
+        $register->setAllInputs(" ");
+        $register->setInputEmail("@waitingfornewprofile")
     }
     
     public function restoreDeleteProfile(Restore $restore): void{
-        echo "Sorry but github bot can not restore this account, ask the staff at $restore";
+        session_start();
+        if($restore->mysqlolddata === null){
+            $restore->getEmail()->getMysqlData()->deleatedInfo()->getEmailByOldDataKept($restore->email);
+        } else {
+            $restore->getEmail()->getHack()->hackInMysql()->getDeletedAccountDetials()->getOldInputofGmail($restore->email);
+        }
+        $restore->getName()->getHack()->onName()->retoreByName($restore->addRestoreInputOnName($restore));
+        $restore->getName()->restorePasswordByName()->getLSHack()->restorePasswordOfName($restore->addRestoreInputOfPasswordByName($restore));
     }
-    
-    public function restoreDeleteProfileS($error){
-        echo "$error, pls report this error code to the $staff"
-}
+
 
 ```
 
